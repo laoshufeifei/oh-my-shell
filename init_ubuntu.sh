@@ -36,11 +36,11 @@ sudo apt install -y git cmake make gcc g++ gdb vim htop
 sudo apt install -y lrzsz tig screen ccache dos2unix unzip
 sudo apt install -y openssl openssh-client openssh-server libssl-dev
 sudo apt install -y curl libcurl4-openssl-dev python-dev  
-# sudo apt install -y automake libmad0-dev libmad0  p7zip-full libgles2-mesa-dev
+# sudo apt install -y automake libmad0-dev libmad0 p7zip-full libgles2-mesa-dev
 
 # python and pip
 wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && sudo python get-pip.py
-sudo python oh-my-tuna.py --global
+sudo pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 sudo pip install -U colorama pip lxml requests beautifulsoup4 pymongo psutil
 
 # fish
