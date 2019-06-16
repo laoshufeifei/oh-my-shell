@@ -3,7 +3,7 @@
 installFish=1
 mail="laoshufeifei@qq.com"
 
-function checkAndInstall()
+function installDependents()
 {
     for b in $@; do
         if [[ -z `which $b` ]];then
@@ -22,7 +22,7 @@ function checkAndInstall()
 }
 
 # first should install wget and python
-checkAndInstall wget python
+installDependents wget python
 
 wget https://tuna.moe/oh-my-tuna/oh-my-tuna.py -O oh-my-tuna.py
 sudo python oh-my-tuna.py --global

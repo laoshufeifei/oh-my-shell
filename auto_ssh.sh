@@ -8,20 +8,20 @@
 #func_expect "$cmd" "$pwd"
 function func_expect()
 {
-		ExpetEnv=`which expect`
-		if [ -z $ExpetEnv ];then
-			echo "[WARNING]:I can't find expect! You can install it by typing:"
-			echo "sudo apt install expect"
-			exit 1
-		fi
-		$ExpetEnv -c "
-		set timeout -1;
-		spawn $1;
-		expect {
-				\"(yes/no)?\" {send \"yes\n\";expect \"assword:\";send \"$2\n\"}
-				\"assword:\" {send $2\n}
-				eof {exit 0;}}
-		expect eof"
+        ExpetEnv=`which expect`
+        if [ -z $ExpetEnv ];then
+            echo "[WARNING]:I can't find expect! You can install it by typing:"
+            echo "sudo apt install expect"
+            exit 1
+        fi
+        $ExpetEnv -c "
+        set timeout -1;
+        spawn $1;
+        expect {
+                \"(yes/no)?\" {send \"yes\n\";expect \"assword:\";send \"$2\n\"}
+                \"assword:\" {send $2\n}
+                eof {exit 0;}}
+        expect eof"
 }
 
 pwd="123"

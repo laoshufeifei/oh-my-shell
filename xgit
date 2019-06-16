@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function gitForOneProj()
+function execCMD()
 {
     proj=`realpath $1/..`
     shift
@@ -15,8 +15,8 @@ function gitForOneProj()
 
 root=`realpath .`
 for p in `find $root -iname "*.git" -type d`;do
-    # gitForOneProj $p $* &
-    gitForOneProj $p $*
+    # execCMD $p $* &
+    execCMD $p $*
 done
 
 wait
