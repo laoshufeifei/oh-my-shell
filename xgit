@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function gitForOneProj()
+{
+    proj=`realpath $1/..`
+    shift
+    cmd="git $*"
+    cd $proj && $cmd
+    if [[ $? != 0 ]];then
+        echo -e "at [$proj] exec [$cmd] failed\n\n\n"
+    else
+        echo -e "at [$proj] exec [$cmd] success\n\n\n"
+    fi
+}
+
+root=`realpath .`
+for p in `find $root -iname "*.git" -type d`;do
+    # gitForOneProj $p $* &
+    gitForOneProj $p $*
+done
+
+wait
