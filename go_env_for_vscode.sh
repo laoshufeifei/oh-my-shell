@@ -17,3 +17,14 @@ github.com/go-delve/delve/cmd/dlv
 for p in $projs;do
 	goget -u $p
 done
+
+# https://github.com/Microsoft/vscode-go/issues/2024
+# cp godef godef-gomod
+cd $GOPATH/bin
+if [[ ! -f gocode-gomod && ! -f gocode-gomod.exe ]];then
+	if [[ -f gocode.exe ]];then
+		cp gocode.exe gocode-gomod.exe
+	else
+		cp gocode gocode-gomod
+	fi
+fi
