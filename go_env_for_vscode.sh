@@ -1,7 +1,10 @@
 #!/bin/bash
 
-export http_proxy=socks5://127.0.0.1:1080
-export https_proxy=socks5://127.0.0.1:1080
+# export http_proxy=socks5://127.0.0.1:1080
+# export https_proxy=socks5://127.0.0.1:1080
+
+export GO111MODULE=on
+export GOPROXY=https://goproxy.io
 
 projs="
 github.com/uudashr/gopkgs/cmd/gopkgs
@@ -32,12 +35,13 @@ if [[ $? == 0 ]];then
 fi
 
 
-
+cd $GOPATH
 for p in $projs;do
     echo go get -u -v $p
     go get -u -v $p
     echo -e "\n\n\n"
 done
+cd -
 
 
 
@@ -51,3 +55,4 @@ if [[ ! -f gocode-gomod && ! -f gocode-gomod.exe ]];then
         cp gocode gocode-gomod
     fi
 fi
+cd -
