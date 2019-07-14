@@ -29,6 +29,7 @@ github.com/josharian/impl
 github.com/davidrjenni/reftools/cmd/fillstruct
 github.com/haya14busa/goplay/cmd/goplay
 github.com/godoctor/godoctor
+golang.org/x/tools/cmd/gopls
 "
 
 # check GOPATH

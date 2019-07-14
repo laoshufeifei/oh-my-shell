@@ -1,44 +1,108 @@
 function fish_prompt --description 'Write out the prompt'
-	
-    set stat $status
+	set -l last_status $status
+
+    if not set -q __fish_git_prompt_show_informative_status
+        set -g __fish_git_prompt_show_informative_status 1
+    end
+    if not set -q __fish_git_prompt_hide_untrackedfiles
+        set -g __fish_git_prompt_hide_untrackedfiles 1
+    end
+
+    if not set -q __fish_git_prompt_color_branch
+        set -g __fish_git_prompt_color_branch magenta --bold
+    end
+    if not set -q __fish_git_prompt_showupstream
+        set -g __fish_git_prompt_showupstream "informative"
+    end
+    if not set -q __fish_git_prompt_char_upstream_ahead
+        set -g __fish_git_prompt_char_upstream_ahead "б№"
+    end
+    if not set -q __fish_git_prompt_char_upstream_behind
+        set -g __fish_git_prompt_char_upstream_behind "б¤"
+    end
+    if not set -q __fish_git_prompt_char_upstream_prefix
+        set -g __fish_git_prompt_char_upstream_prefix ""
+    end
+
+    if not set -q __fish_git_prompt_char_stagedstate
+        set -g __fish_git_prompt_char_stagedstate "бё"
+    end
+    if not set -q __fish_git_prompt_char_dirtystate
+        set -g __fish_git_prompt_char_dirtystate "?"
+    end
+    if not set -q __fish_git_prompt_char_untrackedfiles
+        set -g __fish_git_prompt_char_untrackedfiles "бн"
+    end
+    if not set -q __fish_git_prompt_char_invalidstate
+        set -g __fish_git_prompt_char_invalidstate "?"
+    end
+    if not set -q __fish_git_prompt_char_cleanstate
+        set -g __fish_git_prompt_char_cleanstate "?"
+    end
+
+    if not set -q __fish_git_prompt_color_dirtystate
+        set -g __fish_git_prompt_color_dirtystate blue
+    end
+    if not set -q __fish_git_prompt_color_stagedstate
+        set -g __fish_git_prompt_color_stagedstate yellow
+    end
+    if not set -q __fish_git_prompt_color_invalidstate
+        set -g __fish_git_prompt_color_invalidstate red
+    end
+    if not set -q __fish_git_prompt_color_untrackedfiles
+        set -g __fish_git_prompt_color_untrackedfiles $fish_color_normal
+    end
+    if not set -q __fish_git_prompt_color_cleanstate
+        set -g __fish_git_prompt_color_cleanstate green --bold
+    end
 
     if not set -q __fish_prompt_normal
         set -g __fish_prompt_normal (set_color normal)
     end
 
-    if not set -q __fish_color_blue
-        set -g __fish_color_blue (set_color -o blue)
-    end
-
-    if not set -q __fish_color_red
-        set -g __fish_color_red (set_color -o red)
-    end
-
-    #Set the color for the status depending on the value
-    set __fish_color_status (set_color -o green)
-    if test $stat -gt 0
-        set __fish_color_status (set_color -o red)
-    end
-
-    set -l home_escaped (echo -n $HOME | sed 's/\//\\\\\//g')
-    set -l pwd (echo -n $PWD | sed "s/^$home_escaped/~/" | sed 's/ /%20/g')
-
+    set -l color_cwd
+    set -l prefix
+    set -l suffix
     switch "$USER"
         case root toor
-            if not set -q __fish_prompt_cwd
-                if set -q fish_color_cwd_root
-                    set -g __fish_prompt_cwd (set_color $fish_color_cwd_root)
-                else
-                    set -g __fish_prompt_cwd (set_color $fish_color_cwd)
-                end
+            if set -q fish_color_cwd_root
+                set color_cwd $fish_color_cwd_root
+            else
+                set color_cwd $fish_color_cwd
             end
-            printf '%s@%s %s%s%s# ' $USER (prompt_hostname) "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal"
-
+            set suffix '#'
         case '*'
-            if not set -q __fish_prompt_cwd
-                set -g __fish_prompt_cwd (set_color $fish_color_cwd)
-            end
-
-            printf '%s%s %s%s@%s:%s%s%s%s %s(%s)%s \f\r> ' "$__fish_color_red" (date "+%H:%M:%S") "$__fish_color_blue" $USER (hostname -f) "$__fish_prompt_cwd" $pwd "$__fish_color_red" (__fish_git_prompt) "$__fish_color_status" "$stat" "$__fish_prompt_normal"
+            set color_cwd $fish_color_cwd
+            set suffix '$'
     end
+
+    # time
+    set_color -o red
+    set -l _time (date "+%H:%M:%S")
+    echo -n "$_time "
+    set_color normal
+
+    # USER@HOSTNAME
+    set_color -o blue
+    set -l _host (hostname -f)
+    echo -n "$USER@$_host:"
+    set_color normal
+
+    # PWD
+    set_color $color_cwd
+    set -l home_escaped (echo -n $HOME | sed 's/\//\\\\\//g')
+    set -l _pwd (echo -n $PWD | sed "s/^$home_escaped/~/" | sed 's/ /%20/g')
+    echo -n "$_pwd"
+    set_color normal
+
+    printf '%s ' (__fish_vcs_prompt)
+
+    if not test $last_status -eq 0
+        set_color $fish_color_error
+        echo -n "[$last_status] "
+        set_color normal
+    end
+
+    printf '\f\r'
+    echo -n "$suffix "
 end
