@@ -1,22 +1,60 @@
 #!/bin/bash
 
-function execCMD()
+if [[ -z $1 ]];then
+    echo "Usage: $0 (git command)"
+    echo "Usage: $0 status"
+    echo "Usage: $0 -D/-d/--depth N status(N is for find -maxdepth N+1 ...)"
+    exit
+fi
+
+
+depth=0
+if [[ $1 == "-D" || $1 == "-d" || $1 == "--depth" ]];then
+    depth=$2
+    shift 2
+fi
+
+succ=1
+errors=()
+
+function cmd()
 {
+    echo -e ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
     proj=`realpath $1/..`
     shift
     cmd="git $*"
     cd $proj && $cmd
     if [[ $? != 0 ]];then
-        echo -e "at [$proj] exec [$cmd] failed\n\n\n"
+        succ=0
+        err="\e[31mat [$proj] exec [$cmd] failed\e[0m"
+        errors+=("$err")
+        echo -e $err
     else
-        echo -e "at [$proj] exec [$cmd] success\n\n\n"
+        echo -e "\e[92mat [$proj] exec [$cmd] success\e[0m"
     fi
+    echo -e "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n\n\n\n"
 }
 
+# find
 root=`realpath .`
-for p in `find $root -iname "*.git" -type d`;do
-    # execCMD $p $* &
-    execCMD $p $*
+if [[ $depth == 0 ]];then
+    list=`find $root -iname ".git" -type d`
+else
+    list=`find $root -maxdepth $(( depth + 1 )) -iname ".git" -type d`
+fi
+
+# run
+for p in $list;do
+    cmd $p $*
 done
 
-wait
+# report
+if [[ $succ == 1 ]];then
+    echo -e "\e[92mall success\e[0m"
+else
+    echo -e "\e[31mhave some errors:\e[0m"
+    for i in "${!errors[@]}"; do
+        echo -e ${errors[i]}
+    done
+fi
+echo -e "\e[0m"
