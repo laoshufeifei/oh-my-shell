@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ -z $1 ]];then
+    echo "Usage: $0 the thread name you want kill"
+    echo "Usage: $0 -v (only view the thread you watch kill)"
+    exit
+fi
+
+view=0
+if [[ $1 == "-v" ]];then
+    view=1
+    shift 1
+fi
+name=$1
+
+# echo $view
+# echo $name
+
+if [[ $view == 1 ]];then
+    ps aux | grep -v grep | grep -v $0 | grep -E -i $name
+else
+    ps aux | grep -v grep | grep -v $0 | grep -E -i $name | awk '{print $2}' | xargs kill -9
+fi
