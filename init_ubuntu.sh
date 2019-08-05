@@ -48,9 +48,9 @@ fi
 sudo apt update
 
 sudo apt install -y git cmake make gcc g++ gdb vim htop
-sudo apt install -y lrzsz tig screen ccache dos2unix unzip
+sudo apt install -y lrzsz tig screen ccache dos2unix unzip zlib1g-dev 
 sudo apt install -y openssl openssh-client openssh-server libssl-dev
-sudo apt install -y curl libcurl4-openssl-dev python-dev  
+sudo apt install -y curl libcurl4-openssl-dev python-dev
 sudo apt install -y automake libmad0-dev libmad0 p7zip-full libgles2-mesa-dev
 
 # python and pip
@@ -67,6 +67,6 @@ if [[ ! -f ~/.gitconfig ]];then
     git config --global user.name $name
     git config --global user.email $mail
 fi
-if [[ ! -f ~/.ssh/id_rsa.pub ]]
+if [[ ! -f ~/.ssh/id_rsa.pub ]];then
     ssh-keygen -t rsa -C $mail -b 4096 && cat ~/.ssh/id_rsa.pub 
 fi
