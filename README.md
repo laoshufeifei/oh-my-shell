@@ -24,7 +24,7 @@ init_ubuntu.sh
 
 安装 Ubuntu 后自动安装一些常用的软件及配置
 
-killx
+pskill
 --------
 
 pkill 或 pgrep 不能模糊搜索(或许我不会)，于是自己封装一个
