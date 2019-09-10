@@ -1,13 +1,5 @@
 #!/bin/bash
 
-read -p "install fish? 1/0 > "
-installFish=$REPLY
-if [[ $installFish == 1 ]];then
-    echo "will install fish"
-else
-    echo "will not install fish"
-fi
-
 if [[ ! -f ~/.gitconfig ]];then
     read -p "input your name for git config > "
     name=$REPLY
@@ -57,11 +49,6 @@ sudo apt install -y automake libmad0-dev libmad0 p7zip-full libgles2-mesa-dev
 wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && sudo python get-pip.py
 sudo pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 sudo pip install -U colorama pip lxml requests beautifulsoup4 pymongo psutil
-
-# fish
-if [[ $installFish == 1 ]];then
-    sudo apt-get install -y fish
-fi
 
 if [[ ! -f ~/.gitconfig ]];then
     git config --global user.name $name
