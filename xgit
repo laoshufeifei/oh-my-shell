@@ -1,14 +1,13 @@
 #!/bin/bash
 
-if [[ -z $1 ]];then
-    echo "Usage: $0 (git command)"
-    echo "Usage: $0 status"
-    echo "Usage: $0 -D/-d/--depth N status(N is for find -maxdepth N+1 ...)"
+if [[ -z $1 || $1 == "-h" || $1 == "--help" ]]; then
+    echo "Usage: $0 [git command]"
+    echo "     -D/-d/--depth N status(N is for find -maxdepth N+1 ...)(default N is 1)"
     exit
 fi
 
 
-depth=0
+depth=1
 if [[ $1 == "-D" || $1 == "-d" || $1 == "--depth" ]];then
     depth=$2
     shift 2
@@ -20,7 +19,7 @@ errors=()
 function cmd()
 {
     echo -e ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
-    proj=`realpath $1/..`
+    proj=`readlink -f $1/..`
     shift
     cmd="git $*"
     cd $proj && $cmd
@@ -36,7 +35,7 @@ function cmd()
 }
 
 # find
-root=`realpath .`
+root=`readlink -f .`
 if [[ $depth == 0 ]];then
     list=`find $root -iname ".git" -type d`
 else

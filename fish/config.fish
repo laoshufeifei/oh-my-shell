@@ -4,3 +4,5 @@ alias lll="git status"
 alias apt="sudo apt"
 alias docker="sudo docker"
 
+alias ..="cd .."
+alias ...="cd ../.."
