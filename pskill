@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -z $1 ]];then
+if [[ -z $1 || $1 == "-h" || $1 == "--help" ]];then
     echo "Usage: $0 the thread name you want kill"
     echo "Usage: $0 -v (only view the thread you watch kill)"
     exit
